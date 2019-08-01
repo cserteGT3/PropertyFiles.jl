@@ -1,0 +1,16 @@
+name = "PropertyFiles"
+uuid = "5eb323a6-7e98-5aa8-ac45-adf0d9f670e5"
+authors = ["Tamás Cserteg <csertegt@gmail.com>"]
+version = "0.1.0"
+
+[deps]
+Dates = "ade2ca70-3891-5945-98fb-dc099432e06a"
+
+[compat]
+julia = "^1"
+
+[extras]
+Test = "8dfed614-e22c-5e08-85e1-65c5234f0b40"
+
+[targets]
+test = ["Test"]
