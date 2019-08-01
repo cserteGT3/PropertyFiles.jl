@@ -5,7 +5,8 @@ makedocs(
     format = :html,
     checkdocs = :exports,
     sitename = "PropertyFiles.jl",
-    pages = ["Home" => "index.md"]
+    pages = ["Home" => "index.md",
+            "Interface" => "lib/interface.md"]
 )
 
 deploydocs(
