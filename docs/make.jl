@@ -2,7 +2,7 @@ using Documenter, PropertyFiles
 
 makedocs(
     modules = [PropertyFiles],
-    format = :html,
+    format = Documenter.HTML(),
     checkdocs = :exports,
     sitename = "PropertyFiles.jl",
     pages = ["Home" => "index.md",
