@@ -5,6 +5,11 @@ using Dates: now
 export Properties, putproperty
 export store, load
 
+"""
+    Properties() = Dict{String,String}()
+
+Convinience constructor for `Dict{String,String}`.
+"""
 Properties() = Dict{String,String}()
 
 function putproperty(prop::Dict{String,String}, key, value::String)
