@@ -1,3 +1,4 @@
+## Documentation: http://docs.travis-ci.com/user/languages/julia/
 language: julia
 dist: xenial
 os:
@@ -12,7 +13,6 @@ notifications:
 git:
   depth: 99999999
 
-## Documentation: http://docs.travis-ci.com/user/languages/julia/
 ## uncomment the following lines to allow failures on nightly julia
 ## (tests will run but not make your overall status red)
 matrix:
@@ -20,7 +20,7 @@ matrix:
   - julia: nightly
 
 ## uncomment following lines to deploy documentation
- jobs:
+jobs:
    include:
      - stage: Documentation
        julia: 1.0
