@@ -64,7 +64,7 @@ julia> store(p, "filename.jlprop")
 julia> store(p, "filename2.jlprop", "comments")
 
 julia> p1 = load("filename.jlprop")
-Properties(Dict("key2"=>"156.0","key3"=>"0","key1"=>"this is a string"))
+Properties(Dict("key2"=>"156.0","key1"=>"this is a string"))
 
 julia> p1.properties == p.properties
 true
