@@ -70,7 +70,8 @@ julia> get(p, "key5", "default value")
 
 * [ ] more tests
 * [ ] more documentation
-* [ ] ?overload `Base.show`/returning the dict by `putproperty()`?
+* [ ] `Base.show`
+* [ ] overload more functions from [Base](https://docs.julialang.org/en/v1/base/collections/#Dictionaries-1)
 * [ ] automatic conversion from string
 
 ## Acknowledgements
