@@ -68,7 +68,8 @@ julia> get(p, "key5", "default value")
 
 ## TODO
 
-* [ ] more tests
+* [ ] more tests for different types
+* [ ] add more tests in general
 * [ ] more documentation
 * [ ] `Base.show`
 * [ ] overload more functions from [Base](https://docs.julialang.org/en/v1/base/collections/#Dictionaries-1)
