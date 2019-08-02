@@ -66,6 +66,7 @@ end
     getprop(prop::Properties, key::String, default::Union{String,Nothing}=nothing)
 
 Return the value stored for the given key or the given default value, if there's no such key.
+If the key does not exists and no default value is given, `nothing` will be returned.
 """
 function getprop(prop::Properties, key::String, default::Union{String,Nothing}=nothing)
     get(prop.properties, key, default)

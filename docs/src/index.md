@@ -34,7 +34,7 @@ julia> setprop(p, "key3", 0)
 You can get the stored values with the `getprop` function.
 ```julia
 julia> getprop(p, "key1")
-"0"
+"this is a string"
 
 julia> getprop(p, "key2")
 "156.0"
