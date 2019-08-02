@@ -22,10 +22,16 @@ export  haskey,
 export  store,
         load
 
+
 struct Properties
     properties::Dict{String,String}
 end
 
+"""
+    Properties()
+
+Constructor for the `Properties` type.
+"""
 Properties() = Properties(Dict{String,String}())
 
 include("overloads.jl")
@@ -69,7 +75,8 @@ end
     getprop!(prop::Properties, key::String, default::String)
 
 Return the value stored for the given key.
-If there's no such key, add the `key=>default` pair to the property-dictionary (see [get!](@ref)).
+If there's no such key, add the `key=>default` pair to the property-dictionary.
+See `Base.get!`.
 """
 function getprop!(prop::Properties, key::String, default::String)
     get!(prop.properties, key, default)
