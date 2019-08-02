@@ -1,8 +1,9 @@
 # PropertyFiles
 
-This small package uses `Dictionary` from Base to implement properties and property files inspired by [Java](https://docs.oracle.com/en/java/javase/12/docs/api/java.base/java/util/Properties.html).
-The Properties class only handles string keys and string values, therefore this package does that too.
+This small package implements properties and property files inspired by [Java](https://docs.oracle.com/en/java/javase/12/docs/api/java.base/java/util/Properties.html).
+Replicating it's functionality the package only handles string keys and string values.
 Advantage is that saving the files is easy-peasy, downside that the user must parse/convert the strings into other types.
+The intended use covers mostly "basic" types like strings, integers, floats, but the package does not restrict the use of other types.
 
 ## Installation
 
@@ -13,68 +14,87 @@ Install the package by:
 
 ## Types and functions
 
-The whole package is based on the `Dict{String,String}` type, and a convenience constructor is available for easier use:
-
+The package introduces the `Properties` type, which wraps a dictionary: `Dict{String,String}`.
 ```julia
+julia> using PropertyFiles
+
 julia> p = Properties()
-Dict{String,String} with 0 entries
+Properties(Dict{String,String}())
 ```
-
-`putproperty()` function can be used to populate the dictionary. For `String` types this is straightforward:
-
+With the `setprop()` function you can populate the property-dictionary.
+Only strings can be used for keys and values, values with other types are converted (more on that later: [Usage with user defined types](@ref)).
+Note that the `setprop` function does not return anything, it mutates the given `Properties`.
 ```julia
-julia> putproperty(p, "key1", "this is a string")
+julia> setprop(p, "key1", "this is a string")
 
-julia> putproperty(p, "key2", "π")
+julia> setprop(p, "key2", 156.0)
+
+julia> setprop(p, "key3", 0)
 ```
-
-Non-string types are converted before inserting them into the dictionary (more on that: [Usage with user defined types](@ref)):
-
+You can get the stored values with the `getprop` function.
 ```julia
-julia> putproperty(p, "key3", 156)
+julia> getprop(p, "key1")
+"0"
 
-julia> putproperty(p, "key4", 156.0)
-```
-
-As the container is a dictionary, the standard getters can be used (see the [docs](https://docs.julialang.org/en/v1/base/collections/#Dictionaries-1)):
-
-```julia
-julia> get(p, "key1", "default value")
-"this is a string"
-
-julia> get(p, "key2", "default value")
-"π"
-
-julia> get(p, "key3", "0")
-"156"
-
-julia> get(p, "key4", "0")
+julia> getprop(p, "key2")
 "156.0"
 
-julia> get(p, "key5", "default value")
+julia> getprop(p, "key3")
+"0"
+
+julia> getprop(p, "not defined key", "default value")
 "default value"
 ```
-
-I did not want to override the standard getters, therefore it is suggested to use string default values (see the following example):
-
-```julia
-julia> get(p, "k", "10")
-"10"
-
-julia> get(p, "k", 10)
-10
-```
-
-The first one returns a string, while latter an integer.
-As the container can only store strings, using the latter could cause problems if the result would be parsed later.
+As the last example shows, you can give a default value for the case the key not exists.
 
 ## Storing and loading files
 
-TBD
+You can save and load the property-dictionary:
+
+```julia
+julia> store(p, "filename.jlprop")
+
+julia> store(p, "filename2.jlprop", "comments")
+
+julia> p1 = load("filename.jlprop")
+Properties(Dict("key2"=>"156.0","key3"=>"0","key1"=>"this is a string"))
+
+julia> p2 = load("filename2.jlprop")
+Properties(Dict("key2"=>"156.0","key3"=>"0","key1"=>"this is a string"))
+
+julia> p1.properties == p2.properties == p.properties
+true
+```
+
+You can see that the loaded data is the same, regardless of the comments.
 
 ## File format
 
-TBD
+The above saved files look like:
+
+*filename.jlprop*:
+```
+#2019-08-02T12:41:12.109
+key2=156.0
+key3=0
+key1=this is a string
+```
+
+*filename2.jlprop*:
+```
+#comments
+#2019-08-02T12:41:09.798
+key2=156.0
+key3=0
+key1=this is a string
+```
+Longer description of the file format is coming later...
+
+!!! warn "Java compatibility"
+
+    The file format is not compatible with Java's file format.
+    In theory Java should be able to parse these files, but not the other way.
+    (This may change in the future, but that is not a priority for now.)
 
 ## Usage with user defined types
 

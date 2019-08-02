@@ -11,9 +11,10 @@
 [![Build Status](https://travis-ci.com/cserteGT3/PropertyFiles.jl.svg?branch=master)](https://travis-ci.com/cserteGT3/PropertyFiles.jl)
 [![codecov.io](http://codecov.io/github/cserteGT3/PropertyFiles.jl/coverage.svg?branch=master)](http://codecov.io/github/cserteGT3/PropertyFiles.jl?branch=master)
 
-This package implements properties and property files inspired by [Java](https://docs.oracle.com/en/java/javase/12/docs/api/java.base/java/util/Properties.html).
-The Properties class only handles string keys and string values, therefore this package does that too.
-Advantage is saving/loading the files is easy-peasy, downside that the user must parse/convert the strings into other types.
+This small package implements properties and property files inspired by [Java](https://docs.oracle.com/en/java/javase/12/docs/api/java.base/java/util/Properties.html).
+Replicating it's functionality the package only handles string keys and string values.
+Advantage is that saving the files is easy-peasy, downside that the user must parse/convert the strings into other types.
+The intended use covers mostly "basic" types like strings, integers, floats, but the package does not restrict the use of other types.
 
 ## Installation
 
@@ -24,46 +25,58 @@ Install the package by:
 
 ## Types and functions
 
-The whole package is based on the `Dict{String,String}` type, and a convenience constructor is available for easier use:
-
+The package introduces the `Properties` type, which wraps a dictionary: `Dict{String,String}`.
 ```julia
+julia> using PropertyFiles
+
 julia> p = Properties()
-Dict{String,String} with 0 entries
+Properties(Dict{String,String}())
 ```
 
-`putproperty()` function can be used to populate the dictionary. For `String` types this is straightforward:
+`setprop()` function can be used to populate the dictionary.
+Only strings can be used for keys and values, values with other types are converted.
 
 ```julia
-julia> putproperty(p, "key1", "this is a string")
+julia> setprop(p, "key1", "this is a string")
 
-julia> putproperty(p, "key2", "π")
+julia> setprop(p, "key2", 156.0)
 ```
-
-Non-string types are converted before inserting them into the dictionary:
-
+You can get the stored values with the `getprop` function.
 ```julia
-julia> putproperty(p, "key3", 156)
+julia> getprop(p, "key1")
+"0"
 
-julia> putproperty(p, "key4", 156.0)
-```
-
-As the container is a dictionary, the standard getters can be used (see the [docs](https://docs.julialang.org/en/v1/base/collections/#Dictionaries-1)):
-
-```julia
-julia> get(p, "key1", "default value")
-"this is a string"
-
-julia> get(p, "key2", "default value")
-"π"
-
-julia> get(p, "key3", "0")
-"156"
-
-julia> get(p, "key4", "0")
+julia> getprop(p, "key2")
 "156.0"
 
-julia> get(p, "key5", "default value")
+julia> getprop(p, "not defined key", "default value")
 "default value"
+```
+As the last example shows, you can give a default value for the case the key not exists.
+
+## Storing and loading files
+
+You can save and load the property-dictionary with or without comments:
+
+```julia
+julia> store(p, "filename.jlprop")
+
+julia> store(p, "filename2.jlprop", "comments")
+
+julia> p1 = load("filename.jlprop")
+Properties(Dict("key2"=>"156.0","key3"=>"0","key1"=>"this is a string"))
+
+julia> p1.properties == p.properties
+true
+```
+
+The produced file looks like (*filename2.jlprop*):
+```
+#comments
+#2019-08-02T12:41:09.798
+key2=156.0
+key3=0
+key1=this is a string
 ```
 
 ## TODO
@@ -71,7 +84,9 @@ julia> get(p, "key5", "default value")
 * [ ] more tests for different types
 * [ ] add more tests in general
 * [ ] more documentation
-* [ ] `Base.show`
+* - [ ] file format description
+* - [ ] Usage with user defined types section
+* [ ] overload `Base.show`
 * [ ] overload more functions from [Base](https://docs.julialang.org/en/v1/base/collections/#Dictionaries-1)
 * [ ] automatic conversion from string
 
