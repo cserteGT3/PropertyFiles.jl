@@ -41,3 +41,17 @@ end
     @test keytype(p) == String
     @test valtype(p) == String
 end
+
+@testset "delete!" begin
+    p = Properties()
+    setprop(p, "key1", "val1")
+    setprop(p, "key2", "val2")
+    @test getprop(p, "key1") == "val1"
+    @test getprop(p, "key2") == "val2"
+
+    @test p == delete!(p, "key1")
+    @test getprop(p, "key1") == nothing
+    
+    @test getprop(p, "key2") == "val2"
+    @test length(keys(p)) == 1
+end
